@@ -26,7 +26,7 @@ sudo apt-get update
 
 # 2.安装ROS
 
-## 1. 添加ROS源
+## 2.1 添加ROS源
 
 ```
 sudo sh -c 'echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -40,7 +40,7 @@ sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31
 sudo apt-get update
 ```
 
-## 2. ROS配置
+## 2.2 ROS配置
 
 ```
 sudo apt-get install -y ros-kinetic-desktop-full
@@ -50,20 +50,65 @@ echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
 ```
+执行`rosdep update`时，若出现：
 
-sudo sh -c 'echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+```
+ERROR: error loading sources list:         <urlopen error <urlopen error [Errno 111] Connection refused>
+```
 
+执行以下步骤：
 
+```
+sudo vim /etc/resolv.conf
+```
+
+将原有的内容注释，并添加以下两行：
+
+```
+nameserver 8.8.8.8 #google域名服务器
+nameserver 8.8.4.4 #google域名服务器
+```
+
+最后`sudo apt-get update`后重新执行`rosdep update`
+
+## 2.3 kobuki开机启动
+
+```
+sudo apt-get install -y ros-kinetic-robot-upstart 
+cd /opt/ros/kinetic/share
+rosrun robot_upstart install turtlebot_bringup/launch/minimal.launch
+sudo systemctl daemon-reload && sudo systemctl start turtlebot
+```
+
+> Tip: `rosrun robot_upstart install`后面必须直接更package的名字，所以，要进入包所在的文件里面执行该命令
 
 # 3. OpenCV
 
-## 1. 配置交换分区
+## 3.1 配置交换分区
 
 防止编译时内存不够用
 
 https://blog.csdn.net/u010429286/article/details/79219230
 
-# 2. OpenCV获取USB摄像头数据卡顿
+## 3.2 编译OpenCV
+
+源码：[OpenCV 3.4](https://opencv.org/opencv-3-4/)
+
+进入网页，点击`Source`下载
+
+```
+unzip opencv-3.4.0.zip
+cd opencv-3.4.0/
+mkdir build
+cd build 
+
+cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local ..
+
+make -j4
+sudo make install #安装
+```
+
+# 3. OpenCV获取USB摄像头数据卡顿
 
 [用opencv调用USB摄像头帧率低问题解释](https://blog.csdn.net/ah_107/article/details/102844130)
 
@@ -97,7 +142,7 @@ sudo ldconfig
 
 ## 4.2开始打包
 
-
+将qt编译好的release版本可执行程序和下面脚本放在一起，然后执行下面脚本
 
 ```
 #!/bin/sh  
