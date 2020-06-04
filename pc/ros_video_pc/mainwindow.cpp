@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
       tcp_client(new QTcpSocket)
 {
     ui->setupUi(this);
+    this->setFixedSize(995,530);
+    ui->label_image->setStyleSheet("border:1px solid #DCDCDC");//显示画面边框
+    this->setWindowTitle("ROS Contrl System");
     ui->pushButton_connect_server_ip->setEnabled(true);
     ui->pushButton_disconnect_server_ip->setEnabled(false);
 
@@ -274,12 +277,18 @@ void MainWindow::on_pushButton_connect_server_ip_clicked()
         qDebug() << "connect failed!";
         ui->pushButton_connect_server_ip->setEnabled(true);
         ui->pushButton_disconnect_server_ip->setEnabled(false);
+        ui->comboBox_server_ip->setEnabled(true);
+        ui->pushButton_refresh->setEnabled(true);
+        ui->lineEdit_server_port->setEnabled(true);
         timer->stop();
     }else {
         //1//xqDebug("netclientread@set_connect() >: socket conncetion succussful.");
         qDebug() << "connect success!";
         ui->pushButton_connect_server_ip->setEnabled(false);
         ui->pushButton_disconnect_server_ip->setEnabled(true);
+        ui->comboBox_server_ip->setEnabled(false);
+        ui->pushButton_refresh->setEnabled(false);
+        ui->lineEdit_server_port->setEnabled(false);
         timer->start();
     }
 }
@@ -294,6 +303,10 @@ void MainWindow::on_pushButton_disconnect_server_ip_clicked()
     tcp_client->disconnectFromHost();
     ui->pushButton_connect_server_ip->setEnabled(true);
     ui->pushButton_disconnect_server_ip->setEnabled(false);
+    ui->pushButton_refresh->setEnabled(true);
+    ui->comboBox_server_ip->setEnabled(true);
+    ui->lineEdit_server_port->setEnabled(true);
+    ui->label_image->clear();//删除最后一帧图像
 }
 
 void MainWindow::on_pushButton_up_clicked()
@@ -419,4 +432,10 @@ void MainWindow::on_pushButton_stop_clicked()
 
     }
 
+}
+
+void MainWindow::on_pushButton_refresh_clicked()
+{
+    ui->comboBox_server_ip->clear();
+    get_lan_ip();
 }

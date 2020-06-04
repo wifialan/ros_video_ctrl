@@ -156,17 +156,27 @@ cp $deplist $des
 
 ## 5.1 开机启动
 
-一般而言，qt开发的GUI界面程序，直接把`.desktop`文件拷贝到`~/.config/autostart/`文件夹内就行，记得加777权限
+### 5.1.1 方法一（推荐）
 
-但由于包含ros环境，在执行前需要加`bash -i -c`，这种情况在拷贝在按照上述办法就启动不起来了，需要登录界面后用脚本启动：
+一般而言，qt开发的GUI界面程序，直接把`.desktop`文件拷贝到
 
-编辑 `~/.profile`文件即可
+`~/.config/autostart/`文件夹内下，
+
+或者拷贝到`/etc/xdg/autostart/`文件夹下，
+
+**记得加777权限**
+
+### 5.1.2 方法二（麻烦）
+
+编辑 `~/.profile`文件
 
 ```
 vim ~/.profile
 ```
 
 在文件最后加入脚本命令：
+
+* Tip: 最后的`&`不可省，`video_server`是qt已发布好的可执行文件
 
 ```
 export DISPLAY=:0 && bash -i -c /home/pi/work/DEBIAN/program/video_server &
@@ -188,7 +198,7 @@ fi
 
 在执行`~/.profile`文件时，先检测是否有`.running`文件，没有该文件则说明是刚开机，可以执行启动脚本，并创建该文件，下次通过SSH接入Ubuntu执行`.profile`文件时，则不会再次执行启动程序脚本。
 
-## 5.2 关机或重启时执行脚本
+## 5.2 关机或重启时执行脚本（若选用5.1.1方式，下面忽略）
 
 该功能是为了删除`.running`文件，下次开机时可以顺利执行启动脚本
 
