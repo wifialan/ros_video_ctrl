@@ -41,6 +41,7 @@ private:
     Ui::MainWindow *ui;
 
     QTimer          *timer;
+    QTimer          *timer_detect_tcp;
     QTcpSocket      *tcp_client;
     QMutex          mutex;
     QString         local_ip;
@@ -64,6 +65,7 @@ private:
 public slots:
     void        on_read_network();
     void        on_next_frame();
+    void        on_timer_detect_tcp();
 
 
 private slots:
@@ -74,7 +76,6 @@ private slots:
     void on_pushButton_down_clicked();
     void on_pushButton_right_clicked();
     void on_pushButton_stop_clicked();
-    void on_pushButton_refresh_clicked();
 };
 
 #endif // MAINWINDOW_H

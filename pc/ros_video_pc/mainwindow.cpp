@@ -13,10 +13,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_connect_server_ip->setEnabled(true);
     ui->pushButton_disconnect_server_ip->setEnabled(false);
 
+    ui->lineEdit_server_ip->setText("192.168.0.104");
     ui->lineEdit_server_port->setText("8989");
     this->local_port = LOCAL_PORT;
     this->local_ip = get_localhost_ip();
-    get_lan_ip();//获取整个局域网里面的IP地址
+    //get_lan_ip();//获取整个局域网里面的IP地址
 
     tcp_client->abort();//取消原有的连接
     socket_connect();
@@ -31,6 +32,13 @@ MainWindow::MainWindow(QWidget *parent)
     timer->setInterval(1000/15);   //set timer match with FPS
     connect(timer, SIGNAL(timeout()), this, SLOT(on_next_frame()));
     timer->stop();
+
+    timer_detect_tcp = new QTimer(this);
+    timer_detect_tcp->setInterval(1000);
+    timer_detect_tcp->stop();
+
+    connect(timer_detect_tcp, SIGNAL(timeout()), this, SLOT(on_timer_detect_tcp()));
+
 
     data_header.append(0xAA);
     data_header.append(0xAA);
@@ -127,7 +135,7 @@ void MainWindow::get_lan_ip()
     for (int i = 0;i<ip.lastIndexOf(".");i++) {
         gateway.append(ip[i]);
     }
-    //qDebug() << gateway;
+    qDebug() << gateway;
     fixed_ip1.append(gateway);
     fixed_ip1.append(".1");
     fixed_ip255.append(gateway);
@@ -142,14 +150,27 @@ void MainWindow::get_lan_ip()
     qDebug() << "---------";
     while((pos = rx.indexIn(result_arp, pos)) != -1){
         QString tmp = rx.cap(0);
-        //qDebug() << tmp;
+        qDebug() << tmp;
         //跳过子网掩码 eg:255.255.255.0
         if( tmp != ip && tmp.contains(gateway) && tmp != fixed_ip1 && tmp != fixed_ip255)
         {
-            ui->comboBox_server_ip->addItem(tmp);
+            ui->lineEdit_server_ip->setText(tmp);
             qDebug() << tmp;
         }
         pos += rx.matchedLength();
+    }
+}
+
+void MainWindow::on_timer_detect_tcp()
+{
+    if (tcp_client->write("detect tcp state") == -1)
+    {
+        // 返回-1说明连接失败
+        ui->lineEdit_server_ip->setEnabled(true);
+        ui->lineEdit_server_port->setEnabled(true);
+        ui->pushButton_connect_server_ip->setEnabled(true);
+        ui->pushButton_disconnect_server_ip->setEnabled(false);
+        ui->label_image->clear();
     }
 }
 
@@ -228,7 +249,7 @@ void MainWindow::ShowImage(QByteArray ba)
     //qDebug() << "解压后数据大小:" << rdc.size();
     QImage img;
     img.loadFromData(rdc);
-    img = img.mirrored(true,false);
+    //img = img.mirrored(true,false);
     ui->label_image->setPixmap(QPixmap::fromImage(img));
     ui->label_image->resize(img.size());
     update();
@@ -264,7 +285,7 @@ void MainWindow::on_pushButton_connect_server_ip_clicked()
     tcp_data_len = 0;
     quint16 remote_port;
     QString remote_ip;
-    remote_ip = ui->comboBox_server_ip->currentText();
+    remote_ip = ui->lineEdit_server_ip->text();
     remote_port = quint16(ui->lineEdit_server_port->text().toUInt());
     tcp_client->connectToHost(remote_ip,remote_port, QIODevice::ReadWrite);
 
@@ -272,13 +293,12 @@ void MainWindow::on_pushButton_connect_server_ip_clicked()
     qDebug() << "远程端口:" << remote_port;
 
     //QObject::connect((QObject*) socket,SIGNAL(readyRead()),(QObject*)this,SLOT(on_read_network()));
-    if( !tcp_client->waitForConnected(1000) ) {
+    if( !tcp_client->waitForConnected(500) ) {
         //1//xqDebug("netclientread@set_connect() >: socket Connection failed!!");
         qDebug() << "connect failed!";
         ui->pushButton_connect_server_ip->setEnabled(true);
         ui->pushButton_disconnect_server_ip->setEnabled(false);
-        ui->comboBox_server_ip->setEnabled(true);
-        ui->pushButton_refresh->setEnabled(true);
+        ui->lineEdit_server_ip->setEnabled(true);
         ui->lineEdit_server_port->setEnabled(true);
         timer->stop();
     }else {
@@ -286,10 +306,10 @@ void MainWindow::on_pushButton_connect_server_ip_clicked()
         qDebug() << "connect success!";
         ui->pushButton_connect_server_ip->setEnabled(false);
         ui->pushButton_disconnect_server_ip->setEnabled(true);
-        ui->comboBox_server_ip->setEnabled(false);
-        ui->pushButton_refresh->setEnabled(false);
+        ui->lineEdit_server_ip->setEnabled(false);
         ui->lineEdit_server_port->setEnabled(false);
         timer->start();
+        timer_detect_tcp->start();
     }
 }
 
@@ -303,8 +323,7 @@ void MainWindow::on_pushButton_disconnect_server_ip_clicked()
     tcp_client->disconnectFromHost();
     ui->pushButton_connect_server_ip->setEnabled(true);
     ui->pushButton_disconnect_server_ip->setEnabled(false);
-    ui->pushButton_refresh->setEnabled(true);
-    ui->comboBox_server_ip->setEnabled(true);
+    ui->lineEdit_server_ip->setEnabled(true);
     ui->lineEdit_server_port->setEnabled(true);
     ui->label_image->clear();//删除最后一帧图像
 }
@@ -434,8 +453,3 @@ void MainWindow::on_pushButton_stop_clicked()
 
 }
 
-void MainWindow::on_pushButton_refresh_clicked()
-{
-    ui->comboBox_server_ip->clear();
-    get_lan_ip();
-}
