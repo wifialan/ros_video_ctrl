@@ -37,80 +37,85 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>240</y>
-      <width>93</width>
-      <height>91</height>
+      <y>150</y>
+      <width>95</width>
+      <height>85</height>
      </rect>
     </property>
     <property name="text">
-     <string>UP</string>
+     <string>前进
+(W)</string>
     </property>
     <property name="shortcut">
-     <string>Up</string>
+     <string>W</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_left">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>340</y>
-      <width>93</width>
-      <height>91</height>
+      <y>238</y>
+      <width>95</width>
+      <height>85</height>
      </rect>
     </property>
     <property name="text">
-     <string>LEFT</string>
+     <string>左转
+(A)</string>
     </property>
     <property name="shortcut">
-     <string>Left</string>
+     <string>A</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_right">
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>340</y>
-      <width>93</width>
-      <height>91</height>
+      <y>238</y>
+      <width>95</width>
+      <height>85</height>
      </rect>
     </property>
     <property name="text">
-     <string>RIGHT</string>
+     <string>右转
+(D)</string>
     </property>
     <property name="shortcut">
-     <string>Right</string>
+     <string>D</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_stop">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>440</y>
-      <width>291</width>
-      <height>61</height>
+      <x>120</x>
+      <y>326</y>
+      <width>95</width>
+      <height>85</height>
      </rect>
     </property>
     <property name="text">
-     <string>STOP</string>
+     <string>停止
+(X)</string>
     </property>
     <property name="shortcut">
-     <string>Space</string>
+     <string>X</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_down">
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>340</y>
-      <width>93</width>
-      <height>91</height>
+      <y>238</y>
+      <width>95</width>
+      <height>85</height>
      </rect>
     </property>
     <property name="text">
-     <string>DOWN</string>
+     <string>后退
+(S)</string>
     </property>
     <property name="shortcut">
-     <string>Down</string>
+     <string>S</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -176,6 +181,210 @@
         <widget class="QLineEdit" name="lineEdit_server_ip"/>
        </item>
       </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton_up_left">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>150</y>
+      <width>95</width>
+      <height>85</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>前进左转
+(Q)</string>
+    </property>
+    <property name="shortcut">
+     <string>Q</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_up_right">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>150</y>
+      <width>95</width>
+      <height>85</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>前进右转
+(E)</string>
+    </property>
+    <property name="shortcut">
+     <string>E</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_back_left">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>326</y>
+      <width>95</width>
+      <height>85</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>后退左转
+(Z)</string>
+    </property>
+    <property name="shortcut">
+     <string>Z</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_back_right">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>326</y>
+      <width>95</width>
+      <height>85</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>后退右转
+(C)</string>
+    </property>
+    <property name="shortcut">
+     <string>C</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_line_speed_increase">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>416</y>
+      <width>145</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>线速度(+0.05m/s)
+(U)</string>
+    </property>
+    <property name="shortcut">
+     <string>U</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_line_speed_decrease">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>416</y>
+      <width>145</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>线速度(-0.05m/s)
+(I)</string>
+    </property>
+    <property name="shortcut">
+     <string>I</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_angular_speed_decrease">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>460</y>
+      <width>145</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>角速度(-0.5rad/s)
+(K)</string>
+    </property>
+    <property name="shortcut">
+     <string>K</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_angular_speed_increase">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>460</y>
+      <width>145</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>角速度(+0.5rad/s)
+(J)</string>
+    </property>
+    <property name="shortcut">
+     <string>J</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>117</y>
+      <width>291</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="font">
+        <font>
+         <family>Agency FB</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>线速度</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_line_speed"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="font">
+        <font>
+         <family>Agency FB</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>角速度</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_angular_speed"/>
      </item>
     </layout>
    </widget>

@@ -22,7 +22,10 @@
 #define     ROS_DOWN        0x03
 #define     ROS_RIGHT       0x04
 #define     ROS_STOP        0x05
-
+#define     ROS_UP_LEFT     0x06
+#define     ROS_UP_RIGHT    0x07
+#define     ROS_BACK_LEFT   0x08
+#define     ROS_BACK_RIGHT  0x09
 
 
 QT_BEGIN_NAMESPACE
@@ -76,6 +79,14 @@ private slots:
     void on_pushButton_down_clicked();
     void on_pushButton_right_clicked();
     void on_pushButton_stop_clicked();
+    void on_pushButton_up_left_clicked();
+    void on_pushButton_up_right_clicked();
+    void on_pushButton_back_left_clicked();
+    void on_pushButton_back_right_clicked();
+    void on_pushButton_line_speed_increase_clicked();
+    void on_pushButton_line_speed_decrease_clicked();
+    void on_pushButton_angular_speed_increase_clicked();
+    void on_pushButton_angular_speed_decrease_clicked();
 };
 
 #endif // MAINWINDOW_H

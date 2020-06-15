@@ -9,9 +9,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(995,530);
     ui->label_image->setStyleSheet("border:1px solid #DCDCDC");//显示画面边框
-    this->setWindowTitle("ROS Contrl System");
+    this->setWindowTitle("机器人远程控制系统(北京零维时空科技有限公司)");
     ui->pushButton_connect_server_ip->setEnabled(true);
     ui->pushButton_disconnect_server_ip->setEnabled(false);
+    ui->lineEdit_line_speed->setText("0.3m/s");
+    ui->lineEdit_line_speed->setFocusPolicy(Qt::NoFocus);
+    ui->lineEdit_angular_speed->setText("0.5rad/s");
+    ui->lineEdit_angular_speed->setFocusPolicy(Qt::NoFocus);
 
     ui->lineEdit_server_ip->setText("192.168.0.104");
     ui->lineEdit_server_port->setText("8989");
@@ -332,15 +336,24 @@ void MainWindow::on_pushButton_up_clicked()
 {
     QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
     bool ok;
-    ok = tcp_client->isOpen();//如何连接到服务端，那么返回true，反之返回false
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
     if(ok == true)
     {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
+
         QByteArray commd;
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(ROS_UP);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
         commd.append(0xDD);
         commd.append(0xDD);
         commd.append(0xDD);
@@ -357,15 +370,23 @@ void MainWindow::on_pushButton_left_clicked()
 {
     QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
     bool ok;
-    ok = tcp_client->isOpen();//如何连接到服务端，那么返回true，反之返回false
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
     if(ok == true)
     {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
         QByteArray commd;
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(ROS_LEFT);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
         commd.append(0xDD);
         commd.append(0xDD);
         commd.append(0xDD);
@@ -382,15 +403,23 @@ void MainWindow::on_pushButton_down_clicked()
 {
     QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
     bool ok;
-    ok = tcp_client->isOpen();//如何连接到服务端，那么返回true，反之返回false
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
     if(ok == true)
     {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
         QByteArray commd;
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(ROS_DOWN);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
         commd.append(0xDD);
         commd.append(0xDD);
         commd.append(0xDD);
@@ -407,15 +436,23 @@ void MainWindow::on_pushButton_right_clicked()
 {
     QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
     bool ok;
-    ok = tcp_client->isOpen();//如何连接到服务端，那么返回true，反之返回false
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
     if(ok == true)
     {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
         QByteArray commd;
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(ROS_RIGHT);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
         commd.append(0xDD);
         commd.append(0xDD);
         commd.append(0xDD);
@@ -432,15 +469,23 @@ void MainWindow::on_pushButton_stop_clicked()
 {
     QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
     bool ok;
-    ok = tcp_client->isOpen();//如何连接到服务端，那么返回true，反之返回false
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
     if(ok == true)
     {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
         QByteArray commd;
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(0xCC);
         commd.append(ROS_STOP);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
         commd.append(0xDD);
         commd.append(0xDD);
         commd.append(0xDD);
@@ -453,3 +498,167 @@ void MainWindow::on_pushButton_stop_clicked()
 
 }
 
+
+void MainWindow::on_pushButton_up_left_clicked()
+{
+    QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
+    bool ok;
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
+    if(ok == true)
+    {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
+        QByteArray commd;
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(ROS_UP_LEFT);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        tcp_client->write(commd);
+        qDebug() << "向ROS机器人发送 停止 命令";
+    }
+}
+
+void MainWindow::on_pushButton_up_right_clicked()
+{
+    QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
+    bool ok;
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
+    if(ok == true)
+    {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
+        QByteArray commd;
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(ROS_UP_RIGHT);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        tcp_client->write(commd);
+        qDebug() << "向ROS机器人发送 停止 命令";
+    }
+}
+
+void MainWindow::on_pushButton_back_left_clicked()
+{
+    QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
+    bool ok;
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
+    if(ok == true)
+    {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
+        QByteArray commd;
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(ROS_BACK_LEFT);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        tcp_client->write(commd);
+        qDebug() << "向ROS机器人发送 停止 命令";
+    }
+}
+
+void MainWindow::on_pushButton_back_right_clicked()
+{
+    QMutexLocker locker(&mutex);//互斥锁，当向服务端发送控制小车移动状态命令时，禁止发送其他命令数据
+    bool ok;
+    ok = tcp_client->isOpen();//如果连接到服务端，那么返回true，反之返回false
+    if(ok == true)
+    {
+        QString str_line_speed = ui->lineEdit_line_speed->text();
+        double line_speed = str_line_speed.split("m/s").at(0).toDouble() * 100;
+        qDebug() << line_speed ;
+        QString str_angular_speed = ui->lineEdit_angular_speed->text();
+        double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() * 10;
+        qDebug() << angular_speed ;
+        QByteArray commd;
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(0xCC);
+        commd.append(ROS_BACK_RIGHT);
+        commd.append((int)line_speed);
+        commd.append((int)angular_speed);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        commd.append(0xDD);
+        tcp_client->write(commd);
+        qDebug() << "向ROS机器人发送 停止 命令";
+    }
+}
+
+void MainWindow::on_pushButton_line_speed_increase_clicked()
+{
+    QString str_line_speed = ui->lineEdit_line_speed->text();
+    double line_speed = str_line_speed.split("m/s").at(0).toDouble() + 0.05;
+    qDebug() << line_speed ;
+    if(line_speed > 0.5)
+        return;//速度最大值限制在0.5m/s
+    str_line_speed = QString::number(line_speed,10,2);
+    ui->lineEdit_line_speed->setText(str_line_speed + "m/s");
+}
+
+void MainWindow::on_pushButton_line_speed_decrease_clicked()
+{
+    QString str_line_speed = ui->lineEdit_line_speed->text();
+    double line_speed = str_line_speed.split("m/s").at(0).toDouble() - 0.05;
+    qDebug() << line_speed ;
+    if(line_speed < 0.05)
+        return;//速度最小值限制在0.05m/s
+    str_line_speed = QString::number(line_speed,10,2);
+    ui->lineEdit_line_speed->setText(str_line_speed + "m/s");
+}
+
+void MainWindow::on_pushButton_angular_speed_increase_clicked()
+{
+    QString str_angular_speed = ui->lineEdit_angular_speed->text();
+    double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() + 0.2;
+    qDebug() << angular_speed ;
+    if(angular_speed > 2.0)
+        return;//角速度最大值限制在2.0rad/s
+    str_angular_speed = QString::number(angular_speed,10,1);
+    ui->lineEdit_angular_speed->setText(str_angular_speed + "rad/s");
+}
+
+void MainWindow::on_pushButton_angular_speed_decrease_clicked()
+{
+    QString str_angular_speed = ui->lineEdit_angular_speed->text();
+    double angular_speed = str_angular_speed.split("rad/s").at(0).toDouble() - 0.2;
+    qDebug() << angular_speed ;
+    if(angular_speed < 0.1)
+        return;//角速度最小值限制在0.1rad/s
+    str_angular_speed = QString::number(angular_speed,10,1);
+    ui->lineEdit_angular_speed->setText(str_angular_speed + "rad/s");
+}
