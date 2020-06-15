@@ -77,6 +77,8 @@ void MainWindow::decode_tcp_data(QByteArray array)
 {
     QByteArray header;
     quint16 header_index = 0;
+    double line_speed=0.0;
+    double angular_speed=0.0;
 
     header.append(0xCC);
     header.append(0xCC);
@@ -85,27 +87,46 @@ void MainWindow::decode_tcp_data(QByteArray array)
     if(array.contains(header)){
         //获取到数据头
         header_index = array.indexOf(header);
-        //qDebug() << array.at(header_index + 4);
+        line_speed = array.at(header_index + 5) / 100.0;
+        angular_speed = array.at(header_index + 6) / 10.0;
+        qDebug() << line_speed << "m/s " << angular_speed << "rad/s";
+
         switch (array.at(header_index + 4)) {
         case ROS_UP:
             qDebug() << "UP";
-            ros->up(ROS_SPEED_HIGH,ROS_SPEED_HIGH);
+            ros->up(line_speed,0);
             break;
         case ROS_LEFT:
             qDebug() << "LEFT";
-            ros->left(ROS_SPEED_HIGH,ROS_SPEED_HIGH);
+            ros->left(0,angular_speed);
             break;
         case ROS_DOWN:
             qDebug() << "DOWN";
-            ros->down(ROS_SPEED_HIGH,ROS_SPEED_HIGH);
+            ros->down(angular_speed,0);
             break;
         case ROS_RIGHT:
             qDebug() << "RIGHT";
-            ros->right(ROS_SPEED_HIGH,ROS_SPEED_HIGH);
+            ros->right(0,angular_speed);
             break;
         case ROS_STOP:
             qDebug() << "STOP";
             ros->stop();
+            break;
+        case ROS_UP_LEFT:
+            qDebug() << "UP_LEFT";
+            ros->left(line_speed,angular_speed);
+            break;
+        case ROS_UP_RIGHT:
+            qDebug() << "UP_RIGHT";
+            ros->right(line_speed,angular_speed);
+            break;
+        case ROS_BACK_LEFT:
+            qDebug() << "BACK LEFT";
+            ros->left(-line_speed,angular_speed);
+            break;
+        case ROS_BACK_RIGHT:
+            qDebug() << "BACK RIGHT";
+            ros->right(-line_speed,angular_speed);
             break;
         default:
             break;

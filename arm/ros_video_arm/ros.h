@@ -20,6 +20,10 @@
 #define     ROS_DOWN        0x03
 #define     ROS_RIGHT       0x04
 #define     ROS_STOP        0x05
+#define     ROS_UP_LEFT     0x06
+#define     ROS_UP_RIGHT    0x07
+#define     ROS_BACK_LEFT   0x08
+#define     ROS_BACK_RIGHT  0x09
 
 #define     ROS_SPEED_HIGH              0.3
 

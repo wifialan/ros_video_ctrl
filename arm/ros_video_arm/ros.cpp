@@ -44,14 +44,14 @@ void Ros::down(double linear, double angular){
 
 void Ros::right(double linear, double angular){
 
-    this->speed.linear.x = 0;
+    this->speed.linear.x = linear;
     this->speed.angular.z = -angular;
     this->pub_cmd_vel.publish(this->speed);
 }
 
 void Ros::left(double linear, double angular){
 
-    this->speed.linear.x = 0;
+    this->speed.linear.x = linear;
     this->speed.angular.z = angular;
     this->pub_cmd_vel.publish(this->speed);
 }
