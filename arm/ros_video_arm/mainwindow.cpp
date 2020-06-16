@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->local_ip = "192.168.0.105";//get_localhost_ip();
     //socket_connect();
     camrea_open = false;
+    cap_number = 0;
     cam_open();
     tcpServer=new QTcpServer(this);
     //sleep(5);
@@ -193,7 +194,11 @@ void MainWindow::cam_open()
     if (capture.isOpened()){
         capture.release();     //decide if capture is already opened; if so,close it
     }
-    capture.open(0);           //open the default camera
+    while (capture.open(cap_number) == false)           //open the default camera
+    {
+        cap_number++;
+    }
+    qDebug() << "open cap success";
     qDebug() << "open cap";
     if (capture.isOpened())
     {

@@ -314,7 +314,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>角速度(-0.5rad/s)
+     <string>角速度(-0.2rad/s)
 (K)</string>
     </property>
     <property name="shortcut">
@@ -337,7 +337,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>角速度(+0.5rad/s)
+     <string>角速度(+0.2rad/s)
 (J)</string>
     </property>
     <property name="shortcut">

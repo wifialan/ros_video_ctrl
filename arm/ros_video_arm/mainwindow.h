@@ -45,6 +45,7 @@ private:
     quint16     local_port;
     VideoCapture    capture;
     VideoWriter     vw;
+    quint8      cap_number;
     double          rate; //FPS
     Mat             frame;
     QTimer          *timer;
