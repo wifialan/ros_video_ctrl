@@ -234,7 +234,11 @@ void MainWindow::on_next_frame()
     QString current_date = current_date_time.toString("yyyy-MM-dd hh:mm:ss.zzz");
     qDebug() << current_date;
     if (!capture.isOpened()){
-        capture.open(0);     //decide if capture is already opened; if so,close it
+        cap_number = 0;
+        while (capture.open(cap_number) == false)           //open the default camera
+        {
+            cap_number++;
+        }
         int fourcc = vw.fourcc('M','J','P','G');
         camrea_open = true;
         qDebug() << "open cap success";
