@@ -194,12 +194,9 @@ void MainWindow::cam_open()
     if (capture.isOpened()){
         capture.release();     //decide if capture is already opened; if so,close it
     }
-    while (capture.open(cap_number) == false)           //open the default camera
-    {
-        cap_number++;
-    }
+    cap_number = detect_camera_number();
+    capture.open(cap_number);          //open the default camera
     qDebug() << "open cap success";
-    qDebug() << "open cap";
     if (capture.isOpened())
     {
         int fourcc = vw.fourcc('M','J','P','G');
@@ -218,8 +215,8 @@ void MainWindow::cam_open()
         {
             qDebug() << "get cap";
             timer = new QTimer(this);
-            timer->setInterval(1000/rate);   //set timer match with FPS
-            //connect(timer, SIGNAL(timeout()), this, SLOT(on_next_frame()));
+            timer->setInterval(1000);   //set timer with 1s to detect weather camera is online
+            connect(timer, SIGNAL(timeout()), this, SLOT(on_detect_timer_online()));
             timer->stop();
         }
     } else {
@@ -228,17 +225,49 @@ void MainWindow::cam_open()
     }
 }
 
+void MainWindow::on_detect_timer_online()
+{
+    double dHue = capture.get(CV_CAP_PROP_HUE);
+    if (dHue != 0)
+    {
+        capture.release();
+    }
+}
+
+qint8 MainWindow::detect_camera_number()
+{
+    QStringList options;
+    options << "-c" << "ls /dev/ | grep video";
+    QProcess process;
+    process.start("/bin/bash", options);
+    process.waitForFinished();
+    QByteArray output = process.readAllStandardOutput();
+    QString str = output;
+    if(str.contains("video"))
+    {
+        str = str.split("video").at(1);
+        str = str.split("\n").at(0);
+        qDebug()<<"output" << str;
+        return str.toInt();
+    } else {
+        qDebug() << "return";
+        return -1;
+    }
+}
+
 void MainWindow::on_next_frame()
 {
     QDateTime current_date_time = QDateTime::currentDateTime();
     QString current_date = current_date_time.toString("yyyy-MM-dd hh:mm:ss.zzz");
     qDebug() << current_date;
-    if (!capture.isOpened()){
-        cap_number = 0;
-        while (capture.open(cap_number) == false)           //open the default camera
-        {
-            cap_number++;
-        }
+    qint8 current_cap_number;
+    current_cap_number = detect_camera_number();
+    if(current_cap_number != cap_number && current_cap_number != -1)
+    {
+        cap_number = current_cap_number;
+        //必须释放后才能重新打开
+        capture.release();
+        capture.open(cap_number);     //decide if capture is already opened; if so,close it
         int fourcc = vw.fourcc('M','J','P','G');
         camrea_open = true;
         qDebug() << "open cap success";
@@ -255,6 +284,7 @@ void MainWindow::on_next_frame()
 
     if(capture.isOpened())
     {
+
         capture >> frame;
 
         cvtColor(frame,frame,CV_BGR2RGB);

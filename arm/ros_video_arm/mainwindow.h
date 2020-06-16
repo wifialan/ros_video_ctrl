@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QNetworkInterface>
 #include <QThread>
+#include <QProcess>
 
 #include <QImage>
 #include <QPixmap>
@@ -45,7 +46,7 @@ private:
     quint16     local_port;
     VideoCapture    capture;
     VideoWriter     vw;
-    quint8      cap_number;
+    qint8      cap_number;
     double          rate; //FPS
     Mat             frame;
     QTimer          *timer;
@@ -58,6 +59,7 @@ private:
     void        write_socket(QByteArray);
     void        cam_open();
     void        decode_tcp_data(QByteArray);
+    qint8      detect_camera_number();
 
 
 
@@ -67,6 +69,7 @@ public slots:
     void        readMesage();
     void        on_next_frame();
     void        on_disconnected();
+    void        on_detect_timer_online();
 
 private slots:
 //    void on_pushButton_connect_server_ip_clicked();
