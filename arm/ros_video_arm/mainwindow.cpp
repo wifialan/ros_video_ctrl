@@ -284,7 +284,7 @@ void MainWindow::on_next_frame()
     //qDebug() << "open cap";
     if(!capture.isOpened())
     {
-        camrea_open();
+        cam_open();
     }
     if(capture.isOpened()){
 

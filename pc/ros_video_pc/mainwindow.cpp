@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_server_port->setText("8989");
     this->local_port = LOCAL_PORT;
     this->local_ip = get_localhost_ip();
+    ui->statusbar->showMessage(this->local_ip);
     //get_lan_ip();//获取整个局域网里面的IP地址
 
     tcp_client->abort();//取消原有的连接
@@ -291,6 +292,7 @@ void MainWindow::on_pushButton_connect_server_ip_clicked()
     QString remote_ip;
     remote_ip = ui->lineEdit_server_ip->text();
     remote_port = quint16(ui->lineEdit_server_port->text().toUInt());
+    tcp_client->abort();
     tcp_client->connectToHost(remote_ip,remote_port, QIODevice::ReadWrite);
 
     qDebug() << "远程IP:" << remote_ip;
